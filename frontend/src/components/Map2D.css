@@ -1,0 +1,27 @@
+/* src/components/Map2D.css */
+.map-container {
+  height: 75vh;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.disaster-icon {
+  background: transparent;
+  border: none;
+}
+.disaster-icon svg {
+  filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.7));
+}
+
+/* Styles for the custom cluster */
+.custom-marker-cluster {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 1px 1px 2px black;
+}

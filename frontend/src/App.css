@@ -1,0 +1,38 @@
+/* Add this to your existing App.css file */
+.view-selector {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.view-selector button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.view-selector button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.view-selector button:hover {
+  background-color: #ddd;
+}
+
+.view-selector button.active:hover {
+  background-color: #0056b3;
+}
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+.leaflet-container {
+  overflow: hidden;
+}

@@ -1,20 +1,44 @@
 from flask import Flask, jsonify
-import pandas as pd
+from flask_cors import CORS
+import requests
 
+# 1. Create the Flask app instance first
 app = Flask(__name__)
+CORS(app)
 
-# Load dataset
-df = pd.read_csv("datasets/Meteorite_Landings.csv")
+# --- Live Events API Endpoint ---
+EONET_API_URL = "https://eonet.gsfc.nasa.gov/api/v3/events?status=open"
 
-# Default route (to test the server)
+@app.route("/api/live-events")
+def get_live_events():
+    try:
+        response = requests.get(EONET_API_URL)
+        response.raise_for_status()
+        events = response.json()['events']
+        return jsonify(events)
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 500
+
+# --- Astronomy Picture of the Day (APOD) API Endpoint ---
+@app.route("/api/apod")
+def get_apod():
+    try:
+        # Remember to replace this with your actual key
+        api_key = "api key here"
+        apod_api_url = "https://api.nasa.gov/planetary/apod"
+        full_url = f"{apod_api_url}?api_key={api_key}"
+        
+        response = requests.get(full_url)
+        response.raise_for_status()
+        
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 500
+    
 @app.route("/")
 def home():
-    return "Backend is running!"
+    return "Backend server is running!"
 
-# API route to get data
-@app.route("/data")
-def get_data():
-    return jsonify(df.head(10).to_dict(orient="records"))  # send first 10 rows as JSON
-
+# 2. Run the app at the end of the file
 if __name__ == "__main__":
     app.run(debug=True)
