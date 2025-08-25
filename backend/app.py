@@ -1,18 +1,20 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
 
-# 1. Create the Flask app instance first
 app = Flask(__name__)
 CORS(app)
 
-# --- Live Events API Endpoint ---
-EONET_API_URL = "https://eonet.gsfc.nasa.gov/api/v3/events?status=open"
-
-@app.route("/api/live-events")
-def get_live_events():
+# --- Live Natural Events Endpoint ---
+@app.route("/api/events/<category>")
+def get_live_events(category):
     try:
-        response = requests.get(EONET_API_URL)
+        if category == 'all':
+            url = "https://eonet.gsfc.nasa.gov/api/v3/events?status=open"
+        else:
+            url = f"https://eonet.gsfc.nasa.gov/api/v3/events?status=open&category={category}"
+            
+        response = requests.get(url)
         response.raise_for_status()
         events = response.json()['events']
         return jsonify(events)
@@ -23,8 +25,7 @@ def get_live_events():
 @app.route("/api/apod")
 def get_apod():
     try:
-        # Remember to replace this with your actual key
-        api_key = "api key here"
+        api_key = "Q05A3Ni3ecYNMAfVELRIXOodlhvOT4VfLT8xzsW7"
         apod_api_url = "https://api.nasa.gov/planetary/apod"
         full_url = f"{apod_api_url}?api_key={api_key}"
         
@@ -34,11 +35,28 @@ def get_apod():
         return response.json()
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
-    
+
+# --- Weather Data Endpoint ---
+@app.route("/api/weather")
+def get_weather():
+    lat = request.args.get('lat')
+    lon = request.args.get('lon')
+
+    if not lat or not lon:
+        return jsonify({"error": "Latitude and longitude are required"}), 400
+
+    try:
+        weather_url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true"
+        response = requests.get(weather_url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 500
+
+# --- Root Endpoint ---
 @app.route("/")
 def home():
     return "Backend server is running!"
 
-# 2. Run the app at the end of the file
 if __name__ == "__main__":
     app.run(debug=True)

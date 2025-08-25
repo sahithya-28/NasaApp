@@ -1,10 +1,65 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import L from 'leaflet';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import axios from 'axios';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import Control from 'react-leaflet-custom-control';
 import Legend from './Legend';
 import './Map2D.css';
+
+// This component will contain our weather popup logic
+function WeatherPopup() {
+  const [weatherInfo, setWeatherInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [latLng, setLatLng] = useState(null);
+
+  useMapEvents({
+    click(e) {
+      setLatLng(e.latlng);
+      setIsLoading(true);
+      setWeatherInfo(null); // Clear old data
+
+      // Fetch weather data from our backend
+      axios.get(`http://localhost:5000/api/weather?lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
+        .then(response => {
+          setWeatherInfo(response.data.current_weather);
+        })
+        .catch(error => {
+          console.error("Error fetching weather data:", error);
+          setWeatherInfo({ error: true }); // Set an error state
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+  });
+
+  if (!latLng) {
+    return null; // Don't show anything if the map hasn't been clicked
+  }
+
+  return (
+    <Popup position={latLng}>
+      {isLoading ? (
+        <p>Loading weather...</p>
+      ) : (
+        weatherInfo && (
+          <div>
+            <h4>Current Weather</h4>
+            {weatherInfo.error ? (
+              <p>Could not retrieve weather data.</p>
+            ) : (
+              <>
+                <p>Temp: {weatherInfo.temperature}°C</p>
+                <p>Wind: {weatherInfo.windspeed} km/h</p>
+              </>
+            )}
+          </div>
+        )
+      )}
+    </Popup>
+  );
+}
 
 // This small component forces the map to resize correctly
 const ResizeHandler = () => {
@@ -95,8 +150,8 @@ function Map2D({ data }) {
       <Control position='bottomright'>
         <Legend />
       </Control>
-
-      {/* Add the ResizeHandler here */}
+      
+      <WeatherPopup />
       <ResizeHandler />
     </MapContainer>
   );
