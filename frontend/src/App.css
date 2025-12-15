@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Add this to your existing App.css file */
 .view-selector {
   margin-top: 20px;
@@ -26,13 +27,186 @@
 .view-selector button.active:hover {
   background-color: #0056b3;
 }
+=======
+/* General Body Styles */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  background-color: #1a1a2e; /* Dark blue space background */
+  color: #e0e0e0; /* Light text color for contrast */
+}
+
+/* Main App Container */
+.App {
+  text-align: center;
+}
+
+/* Header Styling */
+.app-header {
+  padding: 20px;
+  background: linear-gradient(90deg, #0f0f1a, #1a1a2e, #0f0f1a);
+  border-bottom: 2px solid #3a3a5a;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.app-header h1 {
+  color: #e94560;
+  font-size: 3rem;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px #e94560, 0 0 20px #ff6f91;
+}
+
+/* Controls Container */
+>>>>>>> efe0b2c (web design)
 .controls-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 15px;
+<<<<<<< HEAD
   margin-top: 20px;
 }
 .leaflet-container {
   overflow: hidden;
+=======
+}
+
+/* Buttons */
+.view-selector {
+  display: flex;
+  gap: 10px;
+}
+
+.view-selector button {
+  background: #16213e;
+  color: #e0e0e0;
+  border: 1px solid #3a3a5a;
+  padding: 10px 25px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.view-selector button:hover {
+  transform: translateY(-2px);
+  background: #2a2a4e;
+  border-color: #e94560;
+}
+
+.view-selector button.active {
+  background: #e94560;
+  color: #fff;
+  border-color: #e94560;
+  box-shadow: 0 0 15px #e94560;
+}
+
+/* Search Bar */
+.search-bar {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #3a3a5a;
+  background: #0f0f1a;
+  color: #e0e0e0;
+  margin-top: 10px;
+  width: 220px;
+  text-align: center;
+}
+
+/* Main Content */
+main {
+  padding: 20px;
+}
+
+/* Table Improvements */
+.table-container {
+  margin-top: 20px;
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container th, .table-container td {
+  padding: 12px;
+  border-bottom: 1px solid #3a3a5a;
+  text-align: left;
+}
+
+.table-container tr:hover {
+  background: rgba(233, 69, 96, 0.1);
+  cursor: pointer;
+}
+/* General Container */
+.view-container {
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: white;
+  max-width: 900px;
+}
+
+/* Table View */
+.table-view {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-view th, .table-view td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table-view th {
+  background: #f5f5f5;
+  font-weight: bold;
+}
+
+/* 2D Map View (placeholder styling) */
+.map-view {
+  width: 100%;
+  height: 400px;
+  background: linear-gradient(180deg, #87ceeb, #f0f8ff);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.map-view::after {
+  content: "🗺 2D Map Placeholder";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.4rem;
+  color: #333;
+}
+
+/* 3D Globe View (placeholder styling) */
+.globe-view {
+  width: 100%;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #4facfe, #1d2b64);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.4rem;
+  box-shadow: inset -8px -8px 20px rgba(0,0,0,0.3),
+              inset 8px 8px 20px rgba(255,255,255,0.1);
+>>>>>>> efe0b2c (web design)
 }

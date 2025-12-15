@@ -10,11 +10,19 @@
 }
 
 .table-header {
+<<<<<<< HEAD
+=======
+  color:"black";
+>>>>>>> efe0b2c (web design)
   background-color: #f4f4f4;
   font-weight: bold;
 }
 
 .table-cell {
+<<<<<<< HEAD
+=======
+  color:"black";
+>>>>>>> efe0b2c (web design)
   padding: 12px 15px;
   overflow: hidden;
   text-overflow: ellipsis;

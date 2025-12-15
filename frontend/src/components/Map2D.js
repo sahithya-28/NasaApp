@@ -7,9 +7,51 @@ import Control from 'react-leaflet-custom-control';
 import Legend from './Legend';
 import './Map2D.css';
 
+<<<<<<< HEAD
 // This component will contain our weather popup logic
 function WeatherPopup() {
   const [weatherInfo, setWeatherInfo] = useState(null);
+=======
+// --- SearchControl (No changes needed) ---
+function SearchControl({ setView }) {
+  const [query, setQuery] = useState('');
+  const map = useMap();
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!query) return;
+    try {
+      const response = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
+      if (response.data && response.data.length > 0) {
+        const { lat, lon } = response.data[0];
+        map.flyTo([lat, lon], 13);
+      } else {
+        alert('Location not found.');
+      }
+    } catch (error) {
+      console.error("Error fetching geocoding data:", error);
+      alert('Error finding location.');
+    }
+  };
+
+  return (
+    <div className="leaflet-top leaflet-right">
+      <div className="leaflet-control leaflet-bar">
+        <form onSubmit={handleSearch} className="search-form">
+          <input type="text" placeholder="Search for a location..." value={query} onChange={(e) => setQuery(e.target.value)} className="search-input" />
+          <button type="submit" className="search-button">🔍</button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+
+// --- UPDATED WeatherPopup Component ---
+// This component will contain our weather popup logic
+function WeatherPopup() {
+  const [popupData, setPopupData] = useState(null);
+>>>>>>> efe0b2c (web design)
   const [isLoading, setIsLoading] = useState(false);
   const [latLng, setLatLng] = useState(null);
 
@@ -17,6 +59,7 @@ function WeatherPopup() {
     click(e) {
       setLatLng(e.latlng);
       setIsLoading(true);
+<<<<<<< HEAD
       setWeatherInfo(null); // Clear old data
 
       // Fetch weather data from our backend
@@ -31,16 +74,45 @@ function WeatherPopup() {
         .finally(() => {
           setIsLoading(false);
         });
+=======
+      setPopupData(null);
+
+      // --- THE CHANGE IS IN THIS URL ---
+      const locationUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}&accept-language=en`;
+      const weatherUrl = `http://localhost:5000/api/weather?lat=${e.latlng.lat}&lon=${e.latlng.lng}`;
+
+      Promise.all([
+        axios.get(locationUrl), // Fetch location in English
+        axios.get(weatherUrl)
+      ])
+      .then(([locationRes, weatherRes]) => {
+        const locationName = locationRes.data.display_name || 'Unknown location';
+        const weather = weatherRes.data.current_weather;
+        setPopupData({ location: locationName, weather });
+      })
+      .catch(error => {
+        console.error("Error fetching data on click:", error);
+        setPopupData({ error: true });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+>>>>>>> efe0b2c (web design)
     },
   });
 
   if (!latLng) {
+<<<<<<< HEAD
     return null; // Don't show anything if the map hasn't been clicked
+=======
+    return null;
+>>>>>>> efe0b2c (web design)
   }
 
   return (
     <Popup position={latLng}>
       {isLoading ? (
+<<<<<<< HEAD
         <p>Loading weather...</p>
       ) : (
         weatherInfo && (
@@ -52,6 +124,19 @@ function WeatherPopup() {
               <>
                 <p>Temp: {weatherInfo.temperature}°C</p>
                 <p>Wind: {weatherInfo.windspeed} km/h</p>
+=======
+        <p>Loading location & weather...</p>
+      ) : (
+        popupData && (
+          <div>
+            {popupData.error ? (
+              <p>Could not retrieve data.</p>
+            ) : (
+              <>
+                <h4 style={{margin: '0 0 5px 0'}}>{popupData.location.split(',')[0]}</h4>
+                <p>Temp: {popupData.weather.temperature}°C</p>
+                <p>Wind: {popupData.weather.windspeed} km/h</p>
+>>>>>>> efe0b2c (web design)
               </>
             )}
           </div>
@@ -61,7 +146,12 @@ function WeatherPopup() {
   );
 }
 
+<<<<<<< HEAD
 // This small component forces the map to resize correctly
+=======
+
+// --- ResizeHandler (No changes needed) ---
+>>>>>>> efe0b2c (web design)
 const ResizeHandler = () => {
   const map = useMap();
   useEffect(() => {
@@ -70,11 +160,18 @@ const ResizeHandler = () => {
   return null;
 };
 
+<<<<<<< HEAD
 // This function returns a specific SVG icon for an individual disaster
 const getDisasterIcon = (category) => {
   let iconHtml = '';
   const color = '#d9534f'; // Red color for all disaster icons
 
+=======
+// --- getDisasterIcon (No changes needed) ---
+const getDisasterIcon = (category) => {
+  let iconHtml = '';
+  const color = '#d9534f';
+>>>>>>> efe0b2c (web design)
   switch (category) {
     case 'Wildfires':
       iconHtml = `<svg viewBox="0 0 24 24"><path fill="${color}" d="M11.5,22.5c-3.87,0-7-3.13-7-7c0-3.44,2.45-6.3,5.7-6.87C10.2,4.8,11.5,2,13,2c1.93,0,3.5,1.57,3.5,3.5c0,1.38-0.81,2.57-1.97,3.16C17.76,9.36,20,12.42,20,16c0,3.87-3.13,7-7,7C12.55,23,12,22.78,11.5,22.5z M13,4c-0.83,0-1.5,0.67-1.5,1.5S12.17,7,13,7s1.5-0.67,1.5-1.5S13.83,4,13,4z"/></svg>`;
@@ -88,6 +185,7 @@ const getDisasterIcon = (category) => {
     default:
       iconHtml = `<div style="background-color: #808080; width: 100%; height: 100%; border-radius: 50%;"></div>`;
   }
+<<<<<<< HEAD
 
   return L.divIcon({
     className: 'disaster-icon',
@@ -142,19 +240,55 @@ function Map2D({ data }) {
               <Popup>
                 <b>{item.name}</b>
               </Popup>
+=======
+  return L.divIcon({ className: 'disaster-icon', html: iconHtml, iconSize: [24, 24] });
+};
+
+// --- createClusterCustomIcon (No changes needed) ---
+const createClusterCustomIcon = function (cluster) {
+  const count = cluster.getChildCount();
+  let size = 20;
+  let clusterColor = '#92d400';
+  if (count >= 10) { clusterColor = '#f5d423'; size = 20; }
+  if (count >= 100) { clusterColor = '#f0962d'; size = 20; }
+  return L.divIcon({ html: `<div style="background-color: ${clusterColor}; width: 100%; height: 100%; border-radius: 50%; border: 2px solid rgba(0,0,0,0.5);"></div>`, className: 'custom-marker-cluster-solid', iconSize: L.point(size, size, true) });
+};
+
+// --- Main Map2D Component (No changes needed) ---
+function Map2D({ data }) {
+  const position = [20, 0];
+  return (
+    <MapContainer center={position} zoom={2} className="map-container">
+      <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>' url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
+      <MarkerClusterGroup iconCreateFunction={createClusterCustomIcon}>
+        {data.map(item => {
+          if (!item || !item.reclat || !item.reclong) { return null; }
+          return (
+            <Marker key={item.id} position={[item.reclat, item.reclong]} icon={getDisasterIcon(item.category)}>
+              <Popup><b>{item.name}</b></Popup>
+>>>>>>> efe0b2c (web design)
             </Marker>
           );
         })}
       </MarkerClusterGroup>
+<<<<<<< HEAD
 
       <Control position='bottomright'>
         <Legend />
       </Control>
       
+=======
+      <Control position='bottomright'><Legend /></Control>
+      <SearchControl />
+>>>>>>> efe0b2c (web design)
       <WeatherPopup />
       <ResizeHandler />
     </MapContainer>
   );
 }
 
+<<<<<<< HEAD
 export default Map2D;
+=======
+export default Map2D;
+>>>>>>> efe0b2c (web design)
