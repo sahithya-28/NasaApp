@@ -1,0 +1,32 @@
+/* src/components/Table1D.css */
+.table-container-virtual {
+  border: 1px solid #ccc;
+  margin-top: 20px;
+}
+
+.table-header, .table-row {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.table-header {
+  color:"black";
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.table-cell {
+  color:"black";
+  padding: 12px 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+/* Define column widths */
+.table-cell:nth-child(1) { width: 30%; } /* Name */
+.table-cell:nth-child(2) { width: 15%; } /* Mass */
+.table-cell:nth-child(3) { width: 15%; } /* Year */
+.table-cell:nth-child(4) { width: 20%; } /* Latitude */
+.table-cell:nth-child(5) { width: 20%; } /* Longitude */
