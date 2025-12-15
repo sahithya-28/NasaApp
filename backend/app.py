@@ -56,7 +56,7 @@ def get_weather():
 # --- Root Endpoint ---
 @app.route("/")
 def home():
-    return "Backend server is running!"
+    return "Backend server is running!!"
 
 if __name__ == "__main__":
     app.run(debug=True)
